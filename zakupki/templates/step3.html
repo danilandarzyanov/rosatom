@@ -1,0 +1,22 @@
+{% extends 'base_supplier.html' %}
+{% load static %}
+{% block main %}
+    <div class="col-md-9 col-lg-10 mt-0 p-0">
+        <section class="head d-flex align-items-center ">
+            <div class="ms-5 mt-5">
+                <h3>Шаг 3: Загрузите подписанное предложение</h3>
+            </div>
+        </section>
+
+
+        <section class="table-num p-3">
+            <input type="file"/><br>
+            <a href="{% url 'step1' %}" class="btn btn-lg btn-success m-3">Загрузить</a>
+
+        </section>
+
+    </div>
+    </div>
+    </div>
+    </main>
+{% endblock %}

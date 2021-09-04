@@ -1,0 +1,157 @@
+{% load static %}
+<footer>
+    <!-- MODAL BLOCK START -->
+    <div class="modal fade " id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="resultModalLabel">Результаты поиска по закупке: {number}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Компания</th>
+                            <th scope="col">Категория</th>
+                            <th scope="col">Запросы</th>
+                            <th scope="col">Оценка</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Доза-Гран</td>
+                            <td>Эксперт в области биоэнергетики</td>
+                            <td><button class="btn btn-primary">Отправить запрос цены</button></td>
+                            <td>
+
+                                <i class="fas fa-heart"></i>
+                                <i class="fas fa-heart-broken"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <td colspan="4" >Цена: не известно</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>АРХИМЕТСТРОЙ-РУС</td>
+                            <td>Производство и продажа кованых и штампованных элементов художественной ковки</td>
+                            <td><button class="btn btn-primary" disabled>Запрос цены уже отправлен</button></td>
+                            <td>
+
+                                <i class="fas fa-heart"></i>
+                                <i class="fas fa-heart-broken"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <td colspan="4" >Цена: не известно</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td >РОТОПЛАСТ</td>
+                            <td>Производство бесшовных пластиковых изделий методом ротационного формования
+                            </td>
+                            <td><button class="btn btn-success">Отправить запрос ТКП</button></td>
+                            <td>
+
+                                <i class="fas fa-heart"></i>
+                                <i class="fas fa-heart-broken"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <td colspan="4" >Цена: 1 500 000₽</td>
+                        </tr>
+                        <tr class="last" >
+                            <th></th>
+                            <td colspan="4" class="text-center"><button class="btn btn-primary">Отправить всем</button></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="row">
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="modal fade " id="plusModal" tabindex="-1" aria-labelledby="plusModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="plusModalLabel">Добавить запрос цен вручную</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h2>Добавить новый запрос</h2>
+                    <form action="">
+                        <input type="text" name="okpd2" placeholder="ОКПД2" class="form-control"><br>
+                        <input type="text" name="org" value="" placeholder="Организация" class="form-control mt-2"><br>
+                        <label for="" class="mt-2">Дата начала</label> <br>
+                        <input type="date"  class="form-control" name="date_start"> <br>
+                        <label class="mt-2" for="">Дата окончания</label> <br>
+                        <input type="date" class="form-control" name="date_end"> <br>
+                        <input type="text" value=""  class="form-control" name="document-link" placeholder="Ссылка на документацию">
+                        <table class="table" id="form-table-add">
+                            <thead>
+                            <tr id="num1">
+                                <td>Номенклатура</td>
+                                <td>Единица измерения</td>
+                                <td>Количество</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><input type="text"></td>
+                                <td><input type="text"></td>
+                                <td><input type="text"></td>
+                                <td><a href="" class="btnPlus" id="btnPlusFormAdd"><i class="fas fa-plus-square"></i></a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <input type="submit" class="btn btn-success" >
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <!-- MODAL BLOCK END -->
+    <div class="modal fade" id="chatModal" tabindex="-1" aria-labelledby="chatModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="chatModalLabel">Ваши сообщения</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Новых сообщений пока нет
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!--script-->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="{% static 'js/main.js' %}">
+    <script id="__bs_script__">//<![CDATA[
+        document.write("<script async src='http://HOST:3024/browser-sync/browser-sync-client.js?v=2.27.5'><\/script>".replace("HOST", location.hostname));
+    //]]></script>
+</body>
+</html>

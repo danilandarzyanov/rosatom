@@ -1,0 +1,84 @@
+{% extends 'base_supplier.html' %}
+{% load static %}
+{% block main %}
+    <div class="col-md-9 col-lg-10 mt-0 p-0">
+        <section class="head d-flex align-items-center ">
+            <div class="ms-5 mt-5">
+                <h3>Шаг 2: Запрос ценового предложения</h3>
+
+            </div>
+
+
+        </section>
+
+
+        <section class="table-num p-3">
+            <label for="">От кого:</label>
+            <p>Акционерное общество "Русатом Сервис"</p>
+            <label for="">Кому:</label>
+            <p>АРХИМЕТСТРОЙ-РУС</p>
+            Проведение данной процедуры сбора информации не влечет за собой возникновения каких-либо обязательств для
+            заказчика.
+
+            <table class="table" id="form-table-add">
+                <thead>
+                <tr id="num1">
+                    <td>Номенклатура</td>
+                    <td>Единица измерения</td>
+                    <td>Количество</td>
+                    <td>Цена</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td> БУМАГА ТУАЛЕТНАЯ PREMIUM T4 120320 ДВУХСЛОЙНАЯ 8РУЛ РКРЗ</td>
+                    <td>упк</td>
+                    <td>12000</td>
+                    <td><input type="text" value="" placeholder="Цена за шт"></td>
+                </tr>
+                <tr>
+                    <td> БУМАГА ТУАЛЕТНАЯ PREMIUM T2 120243 ДВУХСЛОЙНАЯ</td>
+                    <td>упк</td>
+                    <td>500</td>
+                    <td><input type="text" value="" placeholder="Цена за шт"></td>
+                </tr>
+
+                <tr>
+                    <td>ПОЛОТЕНЦЕ БУМАЖНОЕ 120108 TORK 250Х20ШТ/ПАЧ</td>
+                    <td>упк</td>
+                    <td>1200</td>
+                    <td><input type="text" value="" placeholder="Цена за шт"></td>
+                </tr>
+                </tbody>
+            </table>
+            <h3>Немного дополнительной информации</h3>
+            <div class="row">
+                <div class="col-6">
+                    <label for="">Срок действия цены</label>
+                    <input type="date" class="form-control">
+                </div>
+                <div class="col-6">
+                    <label for=""> Цены указаны?</label><br>
+                    С НДС <input type="checkbox" name="" id="">
+                    <br>
+                    БЕЗ НДС <input type="checkbox" name="" id="">
+                </div>
+
+            </div>
+
+
+            <textarea name="" id="" class="form-control p-2" placeholder="Имеются ли дополнительные затраты"></textarea>
+
+            <div class="col-12 d-flex mt-3 justify-content-between">
+
+                <a href="{% url 'step3' %}" class="btn btn-success">Дальше</a> <a href="static/img/tkp.pdf" class="btn btn-success">Распечатать</a>
+
+            </div>
+
+        </section>
+
+    </div>
+    </div>
+    </div>
+    </main>
+{% endblock %}

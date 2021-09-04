@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main %}
+    <div class="chat-faker" data-bs-toggle="modal" data-bs-target="#chatModal">
+        <svg xmlns="http://www.w3.org/2000/svg" width="34.059" height="33.005" viewBox="0 0 24.059 23.005" class="svg replaced-svg">
+            <g id="message-icon" transform="translate(1.06 1)">
+                <path id="Union_3" data-name="Union 3" d="M.622,20.21a4.745,4.745,0,0,0,2.505-3.177A10.286,10.286,0,0,1,.74,10.439,10.537,10.537,0,0,1,11.37,0,10.537,10.537,0,0,1,22,10.439,10.537,10.537,0,0,1,11.37,20.88a10.736,10.736,0,0,1-4.985-1.217A11.074,11.074,0,0,1,1.272,21C.033,21-.518,20.678.622,20.21Z" transform="translate(0 0.002)" fill="#e9e7ff" stroke="#8280fd" stroke-linejoin="round" stroke-width="2"></path>
+                <circle id="Ellipse_9" data-name="Ellipse 9" cx="1.5" cy="1.5" r="1.5" transform="translate(4.763 8.941)" fill="#8280fd"></circle>
+                <circle id="Ellipse_12" data-name="Ellipse 12" cx="1.5" cy="1.5" r="1.5" transform="translate(9.834 8.941)" fill="#8280fd"></circle>
+                <circle id="Ellipse_11" data-name="Ellipse 11" cx="1.5" cy="1.5" r="1.5" transform="translate(14.906 8.941)" fill="#8280fd"></circle>
+            </g>
+        </svg>
+    </div>
+    <div class="col-md-9 col-lg-10 mt-0 p-0">
+        <section class="head d-flex align-items-center ">
+            <div class="ms-5 mt-5">
+                <h3>Найдено 574 возможных поставщика</h3>
+                <form action="" class="form-control">
+                    <div class="input-wrapper">
+                        <input type="text" id="filter" class="form-control search" placeholder="Введите номер закупки">
+                    </div>
+
+                </form>
+            </div>
+
+
+        </section>
+
+        <section class="addButton">
+            <div class="row mt-3">
+                <div class="col-12  d-flex justify-content-end pe-5">
+                    <a href="" data-bs-toggle="modal" data-bs-target="#plusModal" class="d-inline">
+                        <div class="btn btn-primary  me-3"><i class="fas fa-plus"></i> Добавить тендер</div>
+                    </a>
+                    <div class="dropdown d- inline">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-sync"></i> Обновить с площадки
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item" href="#">Cбербанк-АСТ</a></li>
+                            <li><a class="dropdown-item" href="#">Росэлторг</a></li>
+                            <li><a class="dropdown-item" href="{% url 'update_rts' %}">РТС-тендер</a></li>
+                            <li><a class="dropdown-item" href="#">Закупки Росатом</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="list-company">
+            {% for q in query %}
+                <div class="list-company-block" >
+                <div class="row row pt-5 ps-5 pe-5 pb-0">
+
+                    <div class="col-12  trans-block" id="company_{{ q.id }}">
+                        <p class="companyName ms-2 mb-0 p-0">{{ q.organizer }}</p>
+                        <div class="col-12 pursh-item">
+                            <div class="row">
+                                <div class="col-lg-10 col-md-9 p-4">
+                                    <h6>Запрос предложений № {{ q.num }}</h6>
+                                    <p class="purshName">{{ q.description }}</p>
+                                    <p class="sourceMarket">
+                                        <img src="{% static 'img/rts.jpeg' %}" width="35" height="35" alt="РТС ТЕНДЕР">
+                                    </p>
+
+                                    <a href="#" target="_blank">
+                                        <div class="look">
+                                            Детальная информация <i class="fas fa-arrow-right"></i>
+                                        </div>
+                                    </a>
+
+                                </div>
+                                <div class="col-lg-2 col-md-3 p-0 companyCount d-flex align-items-center">
+                                    <table class="table text-center table-borderless mb-0 me-1">
+                                        <tr>
+                                            <td>найдено</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center companyCount_Number">
+                                                <script>
+                                                    document.write((Math.ceil({{ q.num }}/100)*100 - {{ q.num }})% 20 );
+                                                </script>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>компании</td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="" data-bs-toggle="modal" data-bs-target="#resultModal">Список
+                                                компаний</a></td>
+
+                                        </tr>
+                                    </table>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            {% endfor %}
+
+            </div>
+
+
+        </section>
+        <nav aria-label="" class="d-flex justify-content-center">
+            <ul class="pagination">
+                <li class="page-item"><a class="page-link" href="#">Предыдущая</a></li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">Следующая</a></li>
+            </ul>
+        </nav>
+    </div>
+    </div>
+    </div>
+    </main>
+
+{% endblock %}
+
+

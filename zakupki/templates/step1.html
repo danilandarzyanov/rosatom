@@ -1,0 +1,58 @@
+{% extends 'base_supplier.html' %}
+{% block main %}
+            <div class="col-md-9 col-lg-10 mt-0 p-0">
+                <section class="head d-flex align-items-center ">
+                    <div class="ms-5 mt-5" >
+                        <h3>Шаг 1: Запрос возможности поставки</h3>
+                    </div>
+                </section>
+                <section class="table-num p-3">
+                    <label for="">От кого:</label>
+                    <p>Акционерное общество "Русатом Сервис"</p>
+                    <label for="">Кому:</label>
+                    <p>АРХИМЕТСТРОЙ-РУС</p>
+                    <div>
+                        <i class="fas fa-file-pdf p-2"></i><a href="https://www.rosatom.rts-tender.ru/market/okazanie-uslug-po-remontu-uzla-upravleniia-protivopozharnoi-avtomatiki/tender-2763151/?action=register&id=2763151">Ссылка на документацию</a>
+                    </div>
+                    Проведение данной процедуры сбора информации не влечет за собой возникновения каких-либо обязательств для заказчика.
+
+                    <table class="table" id="form-table-add">
+                        <thead>
+                        <tr id="num1">
+                            <td>Номенклатура</td>
+                            <td>Единица измерения</td>
+                            <td>Количество</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>	БУМАГА ТУАЛЕТНАЯ PREMIUM T4 120320 ДВУХСЛОЙНАЯ 8РУЛ РКРЗ</td>
+                            <td>упк</td>
+                            <td>12000</td>
+                        </tr>
+                        <tr>
+                            <td>	БУМАГА ТУАЛЕТНАЯ PREMIUM T2 120243 ДВУХСЛОЙНАЯ </td>
+                            <td>упк</td>
+                            <td>500</td>
+                        </tr>
+
+                        <tr>
+                            <td>ПОЛОТЕНЦЕ БУМАЖНОЕ 120108 TORK 250Х20ШТ/ПАЧ</td>
+                            <td>упк</td>
+                            <td>1200</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="col-12 d-flex justify-content-between">
+                        <a href="{% url 'step2'  %}" class="btn btn-success">Да, располагаем продукцией / Оказываем такие услуги</a>
+                        <a href="" class="btn btn-danger">Нет такой продукции или услуг у компании</a>
+                    </div>
+
+                </section>
+
+            </div>
+    </div>
+    </div>
+    </main>
+{% endblock %}

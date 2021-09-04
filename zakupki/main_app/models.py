@@ -1,178 +1,7 @@
 from django.db import models
-
+from .tasks import *
 
 # Нормативно-справочная информация
-class nsiOkfs(models.Model):
-    """ ОК форм собственности """
-
-    class Meta:
-        verbose_name = "ОКФС"
-        verbose_name_plural = "ОКФС"
-
-    code = models.CharField(
-        verbose_name='Код ОКФС',
-        max_length=2,
-        unique=True,
-    )
-    name = models.CharField(
-        verbose_name='Наименование по ОКФС',
-        max_length=250,
-    )
-
-    def __str__(self):
-        return "{} {}".format(self.code, self.name)
-
-    def get_id(self):
-        return self.id
-
-
-class nsiOktmo(models.Model):
-    """ ОК территорий муниципальных образований """
-
-    class Meta:
-        verbose_name = "ОКТМО"
-        verbose_name_plural = "ОКТМО"
-
-    code = models.CharField(
-        verbose_name='Код ОКФС',
-        max_length=11,
-        unique=True,
-    )
-    name = models.CharField(
-        verbose_name='Наименование по ОКФС',
-        max_length=250,
-    )
-    parent = models.CharField(
-        max_length=11,
-        null=True,
-    )
-
-    def __str__(self):
-        return "{} {}".format(self.code, self.name)
-
-    def get_id(self):
-        return self.id
-
-
-class nsiOkogu(models.Model):
-    """ ОК органов государственной власти и управления """
-
-    class Meta:
-        verbose_name = "ОКОГУ"
-        verbose_name_plural = "ОКОГУ"
-
-    code = models.CharField(
-        verbose_name='Код ОКОГУ',
-        max_length=7,
-        unique=True,
-    )
-    name = models.CharField(
-        verbose_name='Наименование по ОКОГУ',
-        max_length=250,
-    )
-    parent = models.CharField(
-        max_length=7,
-        null=True,
-    )
-
-    def __str__(self):
-        return "{} {}".format(self.code, self.name)
-
-    def get_id(self):
-        return self.id
-
-
-class nsiOkopf(models.Model):
-    """ ОК организационно-правовых форм """
-
-    class Meta:
-        verbose_name = "ОКОПФ"
-        verbose_name_plural = "ОКОПФ"
-
-    code = models.CharField(
-        verbose_name='Код ОКОПФ',
-        max_length=5,
-        unique=True,
-    )
-    name = models.CharField(
-        verbose_name='Наименование по ОКОГУ',
-        max_length=250,
-    )
-    parent = models.CharField(
-        max_length=5,
-        null=True,
-    )
-
-    def __str__(self):
-        return "{} {}".format(self.code, self.name)
-
-    def get_id(self):
-        return self.id
-
-
-class nsiOkato(models.Model):
-    """ ОК объектов административно-территориального деления """
-
-    class Meta:
-        verbose_name = "ОКАТО"
-        verbose_name_plural = "ОКАТО"
-
-    code = models.CharField(
-        verbose_name='Код ОКАТО',
-        max_length=11,
-        unique=True,
-    )
-    name = models.CharField(
-        verbose_name='Наименование по ОКАТО',
-        max_length=250,
-    )
-    parent = models.CharField(
-        max_length=11,
-        null=True,
-    )
-
-    def __str__(self):
-        return "{} {}".format(self.code, self.name)
-
-    def get_id(self):
-        return self.id
-
-
-class nsiOkeiSection(models.Model):
-    code = models.CharField(
-        verbose_name='Код раздела',
-        max_length=5,
-        unique=True,
-    )
-    name = models.CharField(
-        verbose_name='Наименование раздела',
-        max_length=1000,
-    )
-
-    def __str__(self):
-        return "{} {}".format(self.code, self.name)
-
-    def get_id(self):
-        return self.id
-
-
-class nsiOkeiGroup(models.Model):
-    code = models.IntegerField(
-        verbose_name='Код группы',
-        unique=True,
-    )
-    name = models.CharField(
-        verbose_name='Наименование группы',
-        max_length=1000,
-    )
-
-    def __str__(self):
-        return "{} {}".format(self.code, self.name)
-
-    def get_id(self):
-        return self.id
-
-
 class nsiOkei(models.Model):
     """ ОК единиц измерения """
 
@@ -183,7 +12,6 @@ class nsiOkei(models.Model):
     code = models.CharField(
         verbose_name='Код ОКЕИ',
         max_length=5,
-        unique=True,
     )
     name = models.CharField(
         verbose_name='Наименование по ОКЕИ',
@@ -191,48 +19,6 @@ class nsiOkei(models.Model):
     )
     symbol = models.CharField(
         max_length=30,
-        null=True,
-    )
-    section = models.ForeignKey(
-        nsiOkeiSection,
-        verbose_name='Раздел',
-        on_delete=models.CASCADE,
-    )
-    group = models.ForeignKey(
-        nsiOkeiGroup,
-        verbose_name='Группа',
-        on_delete=models.CASCADE
-    )
-
-    def __str__(self):
-        return "{} {}".format(self.code, self.name)
-
-    def get_id(self):
-        return self.id
-
-
-class nsiOkpd(models.Model):
-    """ ОК видов экономической деятельности, продукции и услуг """
-
-    class Meta:
-        verbose_name = "ОКПД"
-        verbose_name_plural = "ОКПД"
-
-    code = models.CharField(
-        verbose_name='Код ОКПД',
-        max_length=8,
-        unique=True,
-    )
-    name = models.CharField(
-        verbose_name='Наименование по ОКПД',
-        max_length=500,
-    )
-    parent = models.CharField(
-        max_length=8,
-        null=True,
-    )
-    section = models.CharField(
-        max_length=1,
         null=True,
     )
 
@@ -252,8 +38,7 @@ class nsiOkpd2(models.Model):
 
     code = models.CharField(
         verbose_name='Код ОКПД2',
-        max_length=8,
-        unique=True,
+        max_length=20,
     )
     name = models.CharField(
         verbose_name='Наименование по ОКПД2',
@@ -261,43 +46,6 @@ class nsiOkpd2(models.Model):
     )
     parent = models.CharField(
         max_length=8,
-        null=True,
-    )
-
-    def __str__(self):
-        return "{} {}".format(self.code, self.name)
-
-    def get_id(self):
-        return self.id
-
-
-class nsiOkved(models.Model):
-    """ ОК видов экономической деятельности """
-
-    class Meta:
-        verbose_name = "ОКВЭД"
-        verbose_name_plural = "ОКВЭД"
-
-    code = models.CharField(
-        verbose_name='Код ОКВЕД',
-        max_length=15,
-        unique=True,
-    )
-    name = models.CharField(
-        verbose_name='Наименование по ОКВЕД',
-        max_length=500,
-    )
-    parent = models.CharField(
-        max_length=15,
-        null=True,
-    )
-    section = models.CharField(
-        verbose_name='Раздел',
-        max_length=1,
-    )
-    subsection = models.CharField(
-        verbose_name='Подраздел',
-        max_length=2,
         null=True,
     )
 
@@ -339,64 +87,6 @@ class nsiOkved2(models.Model):
         return self.id
 
 
-class nsiOkpo(models.Model):
-    """ ОК предприятий и организаций """
-
-    class Meta:
-        verbose_name = "ОКПО"
-        verbose_name_plural = "ОКПО"
-
-    code = models.CharField(
-        verbose_name='Код ОКПО',
-        max_length=10,
-        unique=True,
-    )
-    name = models.CharField(
-        verbose_name='Наименование ОКПО',
-        max_length=500,
-        null=True,
-    )
-
-    def __str__(self):
-        return "{} {}".format(self.code, self.name)
-
-    def get_id(self):
-        return self.id
-
-
-class nsiOkv(models.Model):
-    """ ОК валют """
-
-    class Meta:
-        verbose_name = "ОК валют"
-        verbose_name_plural = "ОК валют"
-
-    code = models.CharField(
-        verbose_name='Код валюты',
-        max_length=3,
-        unique=True,
-    )
-    digitalCode = models.CharField(
-        verbose_name='Цифровой код валюты',
-        max_length=100,
-    )
-    name = models.CharField(
-        verbose_name='Наименование валюты',
-        max_length=500,
-    )
-    shortName = models.CharField(
-        verbose_name='Наименование валюты',
-        max_length=500,
-        null=True,
-    )
-
-    def __str__(self):
-        return "{} {}".format(self.code, self.name)
-
-    def get_id(self):
-        return self.id
-
-
 class nsiTimeZone(models.Model):
     """ Временная зона """
 
@@ -421,30 +111,6 @@ class nsiTimeZone(models.Model):
         return self.id
 
 
-class nsiIkul(models.Model):
-    """ Идентификационные коды юридического лица """
-
-    class Meta:
-        verbose_name = "ИКЮЛ"
-        verbose_name_plural = "ИКЮЛ"
-
-    code = models.CharField(
-        verbose_name='Код ИКЮЛ',
-        max_length=100,
-        unique=True,
-    )
-    name = models.CharField(
-        verbose_name='Наименвоание вида юридического лица',
-        max_length=255,
-    )
-
-    def __str__(self):
-        return "{} {}".format(self.code, self.name)
-
-    def get_id(self):
-        return self.id
-
-
 class nsiTypeContact(models.Model):
     class Meta:
         verbose_name = "Тип контакта"
@@ -457,28 +123,6 @@ class nsiTypeContact(models.Model):
 
     def __str__(self):
         return self.name
-
-    def get_id(self):
-        return self.id
-
-
-class nsiPPO(models.Model):
-    class Meta:
-        verbose_name = "ППО"
-        verbose_name_plural = "ППО"
-
-    code = models.CharField(
-        verbose_name='Код ППО',
-        max_length=11,
-        unique=True,
-    )
-    name = models.CharField(
-        verbose_name='Наименование ППО',
-        max_length=2000,
-    )
-
-    def __str__(self):
-        return "{} {}".format(self.code, self.name)
 
     def get_id(self):
         return self.id
@@ -512,29 +156,35 @@ class Organization(models.Model):
     registration_date = models.DateTimeField(
         verbose_name='Дата постановки на учет',
         null=True,
+        blank=True,
     )
     ogrn = models.CharField(
         verbose_name='ОГРН',
         max_length=13,
+        null=True,
+        blank=True,
     )
     inn = models.CharField(
         verbose_name='ИНН',
-        max_length=12,
-        unique=True,
+        max_length=20,
     )
     kpp = models.CharField(
         verbose_name='КПП',
-        max_length=9
+        max_length=20,
+        null=True,
+        blank=True,
     )
     legalAddress = models.TextField(
         verbose_name='Юридический адрес',
         max_length=2000,
         null=True,
+        blank=True,
     )
     postalAddress = models.TextField(
         verbose_name='Почтовый адрес',
         max_length=2000,
         null=True,
+        blank=True,
     )
 
     timeZone = models.ForeignKey(
@@ -542,69 +192,12 @@ class Organization(models.Model):
         verbose_name='Временная зона',
         on_delete=models.CASCADE,
         null=True,
+        blank=True,
         related_name="org_timeZone"
-    )
-    okpo = models.ForeignKey(
-        nsiOkpo,
-        verbose_name='ОКПО',
-        on_delete=models.CASCADE,
-        null=True,
-        related_name="org_okpo"
-    )
-    okato = models.ForeignKey(
-        nsiOkato,
-        verbose_name='ОКАТО',
-        on_delete=models.CASCADE,
-        null=True,
-        related_name="org_nsiOkato",
-    )
-    oktmo = models.ForeignKey(
-        nsiOktmo,
-        verbose_name='ОКТМО',
-        on_delete=models.CASCADE,
-        null=True,
-        related_name="org_oktmo",
-    )
-    okfs = models.ForeignKey(
-        nsiOkfs,
-        verbose_name='ОКФС',
-        on_delete=models.CASCADE,
-        null=True,
-        related_name="org_okfs",
-    )
-    okopf = models.ForeignKey(
-        nsiOkopf,
-        verbose_name='ОКОПФ',
-        on_delete=models.CASCADE,
-        null=True,
-        related_name="org_okopf",
     )
 
     def __str__(self):
         return self.short_name
-
-    def get_id(self):
-        return self.id
-
-
-class OrganizationOkved(models.Model):
-    organization = models.ForeignKey(
-        Organization,
-        verbose_name='Организация',
-        on_delete=models.CASCADE,
-    )
-    okved = models.ForeignKey(
-        nsiOkved,
-        verbose_name='ОКВЭД',
-        on_delete=models.CASCADE,
-    )
-    isMain = models.BooleanField(
-        verbose_name='Основной',
-        default=False,
-    )
-
-    def __str__(self):
-        return "{} {}".format(self.organization, self.okved)
 
     def get_id(self):
         return self.id
@@ -718,9 +311,25 @@ class PersonContacts(models.Model):
         return self.id
 
 
+class QueryManager(models.Manager):
+    def get_from_rts(self):
+        get_query_from_rts.apply_async()
+
 # Основные сущности
 class Query(models.Model):
     """ Запросы на цену """
+    num = models.CharField(
+        verbose_name='Номер запроса',
+        max_length=200,
+        null=True,
+        blank=True,
+    )
+    description = models.CharField(
+        verbose_name='Описание',
+        max_length=2000,
+        null=True,
+        blank=True,
+    )
     okpd2 = models.ForeignKey(
         nsiOkpd2,
         verbose_name='ОКПД2',
@@ -729,7 +338,7 @@ class Query(models.Model):
     )
     organizer = models.ForeignKey(
         Organization,
-        verbose_name='ОКПД2',
+        verbose_name='Организатор',
         on_delete=models.CASCADE,
         related_name='query',
     )
@@ -746,6 +355,10 @@ class Query(models.Model):
     link_to_doc = models.URLField(
         verbose_name='Ссылка на документацию',
     )
+    objects = QueryManager()
+
+    def __str__(self):
+        return f"{self.organizer} {self.okpd2}"
 
 
 class QueryNomenclature(models.Model):
@@ -756,9 +369,9 @@ class QueryNomenclature(models.Model):
         verbose_name='Номенклатура',
         related_name='query_nomenclature',
     )
-    count = models.FloatField(
+    count = models.CharField(
         verbose_name='Количество',
-        default=0.0,
+        max_length=50,
     )
     ei = models.ForeignKey(
         "nsiOkei",
@@ -772,6 +385,9 @@ class QueryNomenclature(models.Model):
         on_delete=models.CASCADE,
         related_name='query_nomenclature',
     )
+
+    def __str__(self):
+        return f"{self.nomenclature} {self.count}"
 
 
 class Nomenclature(models.Model):
@@ -787,9 +403,13 @@ class Nomenclature(models.Model):
     type = models.IntegerField(
         verbose_name='Тип',
         default=0,
+        choices=TYPES,
     )
     description = models.TextField(
         verbose_name='Описание',
         blank=True,
         null=True,
     )
+
+    def __str__(self):
+        return self.name

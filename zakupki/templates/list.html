@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block main %}
+    <h1>{{ model }}</h1>
+    {% for item in toolbox %}
+        <a href="{{ item.url }}{{ model_name }}/" class="btn btn-link" id="{{ item.id }}">{{ item.name }}</a>
+    {% endfor %}
+    <input hidden value="{{ model_update_url }} id=" hidden_update"/>
+    {% if command %}
+        <a href="{% url 'get_command' 0 %}" class="btn btn-link" id="command_button">Собрать команду</a>
+    {% endif %}
+    <select class="form-select" size="20" multiple id="select_obj">
+        {% for obj in object_list %}
+            <option value="{{ obj.id }}">{{ obj }}</option>
+        {% endfor %}
+    </select>
+
+{% endblock %}
