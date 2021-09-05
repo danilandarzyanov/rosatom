@@ -129,3 +129,12 @@ main{
     transform:  translateY(-12px);
     transition: all 0.5s 0s ease;
 }
+
+.okveds2
+{
+    height: 150px;
+    overflow: hidden;
+    position: relative;
+    border-radius: 10px;
+}
+

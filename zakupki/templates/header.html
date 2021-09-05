@@ -20,51 +20,39 @@
         <div class="row">
             <div class="col-md-3 col-lg-2 d-md-block bg-light collapse bg-dark d-flex flex-column sidebar">
 
-                <a href="/" class="d-flex align-items-center mb-md-0 me-md-auto text-white text-decoration-none">
-                    <svg class="bi me-2" width="40" height="200"><use xlink:href="#bootstrap"></use></svg>
-                    <span class="fs-6 logo">Росатом поиск</span>
+                <a href="/" class=" logo-block mt-5 mb-5 d-flex flex-column align-items-center  me-md-auto text-white text-decoration-none">
+
+                    <div class="logo">АЗ</div><br>
+                    <div>Ваш асистент по закупкам</div>
                 </a>
                 <hr>
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li class="nav-item">
-                        <a href="#" class="nav-link active" aria-current="page">
+                        <a href="{% url 'index' %}" class="nav-link text-white" aria-current="page">
                             <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
                             Главная
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="nav-link text-white">
+                        <a href="{% url 'org_list' %}" class="nav-link text-white">
                             <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
-                            Мои рассылки
+                            Список компаний
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="nav-link text-white">
+                        <a href="{% url '404' %}" class="nav-link text-white">
                             <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
-                            Аналитика
+                            Мои запросы
                         </a>
                     </li>
                     <li>
                         <a href="#" class="nav-link text-white">
                             <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
-                            Каталоги
+
                         </a>
                     </li>
 
                 </ul>
                 <hr>
-                <div class="dropdown">
-                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-                        <strong>Галеев М.А</strong>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1" style="">
-                        <li><a class="dropdown-item" href="#">Новый поиск</a></li>
-                        <li><a class="dropdown-item" href="#">Мои закупки</a></li>
-                        <li><a class="dropdown-item" href="#">Профиль</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Выйти</a></li>
-                    </ul>
 
-                </div>
             </div>

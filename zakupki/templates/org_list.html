@@ -13,35 +13,28 @@
     </div>
     <div class="col-md-9 col-lg-10 mt-0 p-0">
         <section class="head d-flex align-items-center ">
-            <div class="ms-5 mt-5">
-                <h3>Найдено {{ org_count }} возможных поставщика</h3>
-                <form action="" class="form-control">
-                    <div class="input-wrapper">
-                        <input type="text" id="filter" class="form-control search" placeholder="Введите номер закупки">
+            <div class="row">
+                <div class="col-12">
+                    <div class="ms-5 mt-5" >
+                        <h3>Список компаний</h3>
                     </div>
+                </div>
 
-                </form>
             </div>
-
-
         </section>
 
         <section class="addButton">
             <div class="row mt-3">
                 <div class="col-12  d-flex justify-content-end pe-5">
-                    <a href="" data-bs-toggle="modal" data-bs-target="#plusModal" class="d-inline">
-                        <div class="btn btn-primary  me-3"><i class="fas fa-plus"></i> Добавить тендер</div>
-                    </a>
-                    <div class="dropdown d- inline">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-sync"></i> Обновить с площадки
+                    <div class="dropdown d-inline">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-sync"></i> Обновить из сервиса
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item" href="#">Cбербанк-АСТ</a></li>
-                            <li><a class="dropdown-item" href="#">Росэлторг</a></li>
-                            <li><a class="dropdown-item" href="{% url 'update_rts' %}">РТС-тендер</a></li>
-                            <li><a class="dropdown-item" href="#">Закупки Росатом</a></li>
+                            <li><a class="dropdown-item" href="#">RusProfile.ru</a></li>
+                            <li><a class="dropdown-item" href="{% url 'update_sbis' %}">CБИС Контрагенты</a></li>
+                            <li><a class="dropdown-item" href="#">Контур.Фокус</a></li>
+                            <li><a class="dropdown-item" href="#">СберКорус</a></li>
                         </ul>
                     </div>
                 </div>
@@ -95,47 +88,14 @@
                 <div class="row row pt-2 ps-5 pe-5 pb-5">
 
                     <div class="col-12  trans-block" id="company_{{ q.id }}">
-                        <p class="companyName ms-2 mb-0 p-0">{{ q.organizer }}</p>
+                        <p class="companyName ms-2 mb-0 p-0">{{ q.full_name }}</p>
                         <div class="col-12 pursh-item">
                             <div class="row">
                                 <div class="col-lg-10 col-md-9 p-4">
-                                    <h6>Запрос предложений № {{ q.num }}. Дата начала: {{ q.date_begin }}</h6>
-                                    <p class="purshName">{{ q.description }}</p>
-                                    <p class="sourceMarket">
-                                        <img src="{% static 'img/rts.jpeg' %}" width="35" height="35" alt="РТС ТЕНДЕР">
-                                    </p>
-
-                                    <a href="
-                                    {% if q.url %}
-                                        {{ q.url }}
-                                    {% else %}
-                                            #
-                                    {% endif %}" target="_blank">
-                                        <div class="look">
-                                            Детальная информация <i class="fas fa-arrow-right"></i>
-                                        </div>
-                                    </a>
-
-                                </div>
-                                <div class="col-lg-2 col-md-3 p-0 companyCount d-flex align-items-center">
-                                    <table class="table text-center table-borderless mb-0 me-1">
-                                        <tr>
-                                            <td>найдено</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center companyCount_Number">
-                                                {{ q.count_suppliers }}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>компании</td>
-                                        </tr>
-                                        <tr>
-                                            <td><a href="{% url 'suppliers' q.id %}">Список
-                                                компаний</a></td>
-
-                                        </tr>
-                                    </table>
+                                    <h6>ИНН/КПП {{ q.inn }}/{{ q.kpp }}</h6>
+                                    <h6>ОГРН {{ q.ogrn }}</h6>
+                                    <h6>Основной ОКВЭД: {{ q.get_main_okved2 }}</h6>
+                                <a href="{% url 'suppliers_detail' q.id %}">Подробнее</a>
                                 </div>
 
 

@@ -1,13 +1,20 @@
 from django.db import models
 from .tasks import *
 
+
 # Нормативно-справочная информация
+class nsiOkeiManager(models.Manager):
+    def get_from_gov(self):
+        get_from_gov_okei.apply_async()
+
+
 class nsiOkei(models.Model):
     """ ОК единиц измерения """
 
     class Meta:
         verbose_name = "ОКЕИ"
         verbose_name_plural = "ОКЕИ"
+        ordering = ['code']
 
     code = models.CharField(
         verbose_name='Код ОКЕИ',
@@ -21,6 +28,7 @@ class nsiOkei(models.Model):
         max_length=30,
         null=True,
     )
+    objects=nsiOkeiManager()
 
     def __str__(self):
         return "{} {}".format(self.code, self.name)
@@ -29,12 +37,18 @@ class nsiOkei(models.Model):
         return self.id
 
 
+class nsiOkpd2Manager(models.Manager):
+    def get_from_gov(self):
+        get_from_gov_okpd2.apply_async()
+
+
 class nsiOkpd2(models.Model):
     """ ОК видов экономической деятельности, продукции и услуг """
 
     class Meta:
         verbose_name = "ОКПД2"
         verbose_name_plural = "ОКПД2"
+        ordering = ['code']
 
     code = models.CharField(
         verbose_name='Код ОКПД2',
@@ -44,10 +58,7 @@ class nsiOkpd2(models.Model):
         verbose_name='Наименование по ОКПД2',
         max_length=500,
     )
-    parent = models.CharField(
-        max_length=8,
-        null=True,
-    )
+    objects=nsiOkpd2Manager()
 
     def __str__(self):
         return "{} {}".format(self.code, self.name)
@@ -56,12 +67,17 @@ class nsiOkpd2(models.Model):
         return self.id
 
 
+class nsiOkved2Manager(models.Manager):
+    def get_from_gov(self):
+        get_from_gov_okved2.apply_async()
+
+
 class nsiOkved2(models.Model):
     """ ОК видов экономической деятельности """
-
     class Meta:
         verbose_name = "ОКВЭД2"
         verbose_name_plural = "ОКВЭД2"
+        ordering = ['code']
 
     code = models.CharField(
         verbose_name='Код ОКВЕД2',
@@ -79,6 +95,7 @@ class nsiOkved2(models.Model):
         verbose_name='Раздел',
         max_length=1,
     )
+    objects=nsiOkved2Manager()
 
     def __str__(self):
         return "{} {}".format(self.code, self.name)
@@ -89,7 +106,6 @@ class nsiOkved2(models.Model):
 
 class nsiTimeZone(models.Model):
     """ Временная зона """
-
     class Meta:
         verbose_name = "Временная зона"
         verbose_name_plural = "Временные зоны"
@@ -126,6 +142,14 @@ class nsiTypeContact(models.Model):
 
     def get_id(self):
         return self.id
+
+
+class OrganisationManager(models.Manager):
+    def get_from_gov(self):
+        get_from_gov_organisation.apply_async()
+
+    def get_from_sbis(self):
+        get_org_from_sbis.apply_async()
 
 
 # Юридические и физические лица
@@ -186,7 +210,6 @@ class Organization(models.Model):
         null=True,
         blank=True,
     )
-
     timeZone = models.ForeignKey(
         nsiTimeZone,
         verbose_name='Временная зона',
@@ -195,6 +218,42 @@ class Organization(models.Model):
         blank=True,
         related_name="org_timeZone"
     )
+    director = models.CharField(
+        verbose_name='Руководитель',
+        max_length=300,
+        null=True,
+        blank=True,
+    )
+    owner = models.CharField(
+        verbose_name='Истец (выиграл/проиграл/прочее)',
+        max_length=300,
+        null=True,
+        blank=True,
+    )
+    defend = models.CharField(
+        verbose_name='Ответчик (выиграл/проиграл/прочее)',
+        max_length=300,
+        null=True,
+        blank=True,
+    )
+    tender = models.CharField(
+        verbose_name='Торги (учавствовал/выиграл/госконтракт)',
+        max_length=300,
+        null=True,
+        blank=True,
+    )
+    info = models.TextField(
+        verbose_name='Краткая информация',
+        max_length=3000,
+        null=True,
+        blank=True,
+    )
+    email = models.EmailField(
+        verbose_name='Электронная почта',
+        null=True,
+        blank=True,
+    )
+    objects = OrganisationManager()
 
     def __str__(self):
         return self.short_name
@@ -202,12 +261,22 @@ class Organization(models.Model):
     def get_id(self):
         return self.id
 
+    def get_main_okved2(self):
+        try:
+            res = self.org_okved.filter(isMain=True)[0].okved2
+        except:
+            res = 'Не найден'
+        return res
+
 
 class OrganizationOkved2(models.Model):
+    class Meta:
+        ordering=['okved2']
     organization = models.ForeignKey(
         Organization,
         verbose_name='Организация',
         on_delete=models.CASCADE,
+        related_name='org_okved'
     )
     okved2 = models.ForeignKey(
         nsiOkved2,
@@ -241,71 +310,9 @@ class OrganizationContacts(models.Model):
         verbose_name='Значение',
         max_length=300,
     )
-    person = models.ForeignKey(
-        "Person",
-        verbose_name='Физическое лицо',
-        on_delete=models.CASCADE,
-        related_name="organization_contact"
-    )
 
     def __str__(self):
         return "{} {} {}".format(self.organization, self.type, self.value)
-
-    def get_id(self):
-        return self.id
-
-
-class Person(models.Model):
-    class Meta:
-        verbose_name = "Физическое лицо"
-        verbose_name_plural = "Физические лица"
-
-    firstName = models.CharField(
-        verbose_name='Имя',
-        max_length=300,
-        null=True,
-    )
-    middleName = models.CharField(
-        verbose_name='Отчество',
-        max_length=300,
-        null=True,
-    )
-    lastName = models.CharField(
-        verbose_name='Фамилия',
-        max_length=300,
-        null=True,
-    )
-    inn = models.CharField(
-        verbose_name='ИНН',
-        max_length=12,
-        null=True,
-    )
-
-    def __str__(self):
-        return "{} {}. {}.".format(self.lastName, self.firstName[0], self.middleName[0])
-
-    def get_id(self):
-        return self.id
-
-
-class PersonContacts(models.Model):
-    person = models.ForeignKey(
-        Person,
-        verbose_name='Физическое лицо',
-        on_delete=models.CASCADE,
-    )
-    type = models.ForeignKey(
-        nsiTypeContact,
-        verbose_name='Тип контакта',
-        on_delete=models.CASCADE,
-    )
-    value = models.CharField(
-        verbose_name='Значение',
-        max_length=300,
-    )
-
-    def __str__(self):
-        return "{} {} {}".format(self.person, self.type, self.value)
 
     def get_id(self):
         return self.id
@@ -315,9 +322,15 @@ class QueryManager(models.Manager):
     def get_from_rts(self):
         get_query_from_rts.apply_async()
 
+
 # Основные сущности
 class Query(models.Model):
     """ Запросы на цену """
+    class Meta:
+        verbose_name='Запрос'
+        verbose_name_plural='Запросы'
+        ordering=['okpd2']
+
     num = models.CharField(
         verbose_name='Номер запроса',
         max_length=200,
@@ -355,10 +368,31 @@ class Query(models.Model):
     link_to_doc = models.URLField(
         verbose_name='Ссылка на документацию',
     )
+    url = models.URLField(
+        verbose_name='Детальная информация',
+        null=True,
+        blank=True,
+    )
     objects = QueryManager()
 
     def __str__(self):
         return f"{self.organizer} {self.okpd2}"
+
+    def find_suppliers(self):
+        """ Ищем совпадения ОКПО и ОКВЭД """
+        okpd2_code = self.okpd2.code
+        suppliers_okveds2 = OrganizationOkved2.objects.filter(okved2__code__contains=okpd2_code[:8])
+        if len(suppliers_okveds2) == 0:
+            suppliers_okveds2 = OrganizationOkved2.objects.filter(okved2__code__contains=okpd2_code[:5])
+        suppliers_ids = []
+        for suppliers_okved2 in suppliers_okveds2:
+            suppliers_ids.append(suppliers_okved2.organization.id)
+        suppliers = Organization.objects.filter(id__in=suppliers_ids)
+        return suppliers
+
+    def count_suppliers(self):
+        """ Количество найденных поставщиков """
+        return len(self.find_suppliers())
 
 
 class QueryNomenclature(models.Model):
@@ -413,3 +447,24 @@ class Nomenclature(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class QuerySupplier(models.Model):
+    supplier = models.ForeignKey(
+        Organization,
+        on_delete=models.CASCADE,
+        related_name='query_supplier',
+        verbose_name='Поставщик'
+    )
+
+    query = models.ForeignKey(
+        Query,
+        on_delete=models.CASCADE,
+        related_name='query_supplier',
+        verbose_name='Запрос'
+    )
+
+    status = models.CharField(
+        verbose_name='Статус',
+        max_length=200,
+    )

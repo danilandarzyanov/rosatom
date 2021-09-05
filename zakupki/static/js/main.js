@@ -1,5 +1,5 @@
 $("#filter").keyup(function() {
-    
+
     // Retrieve the input field text and reset the count to zero
     var filter = $(this).val(),
       count = 0;
@@ -37,3 +37,4 @@ $( "#btnPlusFormAdd" ).on( "click", function() {
     event.preventDefault();
     $('#form-table-add tr:last').after('<tr><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td></td></tr>');
   });
+

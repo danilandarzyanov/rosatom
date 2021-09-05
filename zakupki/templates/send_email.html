@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main %}
+    <div class="col-md-9 col-lg-10 mt-0 p-0">
+        <section class="head d-flex align-items-center ">
+            <div class="row">
+                <div class="col-9">
+                    <div class="ms-5 mt-5" >
+                        <h3>Поставщик получит письмо следующего содержания:</h3>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <section class="table-num p-3">
+            <div class="row">
+                <div class="col-6">
+                    <h5>Получатель:</h5>
+                    <p>{{ qs.supplier.email }}</p>
+                    <h5>Тема:</h5>
+                    <p>Запрос коммерческого предложения</p>
+                    <h5>Текст письма:</h5>
+                    <p>Уважаемый {{ qs.supplier.director }}!</p>
+                    <p>Приглашаем вас в наш сервис для заполнения коммерческогоо предложения.</p>
+                    <p>Заполнение КП не займёт много времени и пройдёт за 3 простых шага</p>
+
+                    <p>С уважением и надеждой на дальнейшее взаимовыгодное сотрудничество</p>
+                    <p>{{ qs.query.organizer.director }}</p>
+                    <p>{{ qs.query.organizer.full_name }}</p>
+                    <p><a href='{% url 'step0' qs.id %}' class="btn btn-primary">Приступить</a></p>
+                </div>
+                </div>
+        </section>
+
+        <section class="chart">
+            <div class="col-10">
+                <canvas id="myChart"></canvas>
+            </div>
+        </section>
+
+    </div>
+    </div>
+    </div>
+    </main>
+
+{% endblock %}
+
+

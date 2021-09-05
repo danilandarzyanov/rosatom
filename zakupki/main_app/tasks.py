@@ -4,7 +4,8 @@ import xml.etree.ElementTree as ET
 import zipfile, os, ftplib, requests
 from bs4 import BeautifulSoup
 from django.apps import apps
-import re
+import re, json
+from time import sleep
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'zakupki.settings')
 
@@ -81,62 +82,29 @@ class ZakupkiParser:
     def parse_and_save_to_db(self, class_name, xml_files):
         records = []
         i = 0;
+        nsiOkpd2 = apps.get_model('main_app','nsiOkpd2')
+        nsiOkei = apps.get_model('main_app','nsiOkei')
+        nsiOkved2 = apps.get_model('main_app','nsiOkved2')
+        Organization = apps.get_model('main_app','Organization')
+        nsiTimeZone = apps.get_model('main_app','nsiTimeZone')
+        OrganizationOkved2 = apps.get_model('main_app','OrganizationOkved2')
         for xml_file in xml_files:
             br = False
             xml = ET.parse(xml_file)
             root = xml.getroot()
-            # парсинг nsiOkato
-            if class_name == 'nsiOkato':
-                namespace = "http://zakupki.gov.ru/223fz/reference/1"
-                parent_dom = "nsiOkatoData"
-                data = nsiOkato()
-
-                items = root.findall(f".//{{{namespace}}}{parent_dom}")
-                for item in items:
-                    i += 1
-                    try:
-                        data.code = item.find(f".//{{{namespace}}}code").text
-                        data.name = item.find(f".//{{{namespace}}}name").text
-                        data.parent = item.find(f".//{{{namespace}}}parent").text if item.find(f".//{{{namespace}}}parent") is not None else None
-                        data.save()
-                    except Exception as e:
-                        pass
-                    if i > self.limit_record:
-                        br = True
-                        break
-            if br:
-                break
-
-            if class_name == 'nsiOkdp':
-                namespace = "http://zakupki.gov.ru/223fz/reference/1"
-                parent_dom = "nsiOkdpData"
-                data = nsiOkpd()
-
-                items = root.findall(f".//{{{namespace}}}{parent_dom}")
-                for item in items:
-                    i += 1
-                    try:
-                        data.code = item.find(f".//{{{namespace}}}code").text
-                        data.name = item.find(f".//{{{namespace}}}name").text
-                        data.parent = item.find(f".//{{{namespace}}}parent").text if item.find(
-                            f".//{{{namespace}}}parent") is not None else None
-                        data.save()
-                    except Exception as e:
-                        pass
-                    if i > self.limit_record:
-                        br = True
-                        break
-            if br:
-                break
-
+            # парсинг nsiOkpd2
             if class_name == 'nsiOkpd2':
-                namespace = "http://zakupki.gov.ru/223fz/reference/1"
-                parent_dom = "nsiOkpd2Data"
+                print('nsiOKPDDD')
+                namespace = "oos"
+                parent_dom = ""
 
                 items = root.findall(f".//{{{namespace}}}{parent_dom}")
+                print(items)
                 for item in items:
                     i += 1
+                    print(item)
                     try:
+                        print(item)
                         code = item.find(f".//{{{namespace}}}code").text
                         name = item.find(f".//{{{namespace}}}name").text
                         parent = item.find(f".//{{{namespace}}}parentCode").text
@@ -190,125 +158,6 @@ class ZakupkiParser:
             if br:
                 break
 
-            if class_name == 'nsiOkogu':
-                namespace = "http://zakupki.gov.ru/223fz/reference/1"
-                parent_dom = "nsiOkoguData"
-                items = root.findall(f".//{{{namespace}}}{parent_dom}")
-                for item in items:
-                    i += 1
-                    try:
-                        code = item.find(f".//{{{namespace}}}code").text
-                        name = item.find(f".//{{{namespace}}}name").text
-                        parent = item.find(f".//{{{namespace}}}parentCode").text if item.find(f".//{{{namespace}}}parentCode") is not None else None
-                        nsiOkogu.objects.get_or_create(code=code, name=name, parent=parent)
-
-                    except Exception as e:
-                        print(e)
-                        pass
-                    if i > self.limit_record:
-                        br = True
-                        break
-            if br:
-                break
-
-                # парсинг nsiOkfs
-            if class_name == 'nsiOkfs':
-                namespace = "http://zakupki.gov.ru/223fz/reference/1"
-                parent_dom = "nsiOkfsData"
-                data = nsiOkfs()
-
-                items = root.findall(f".//{{{namespace}}}{parent_dom}")
-                for item in items:
-                    i += 1
-                    try:
-                        code = item.find(f".//{{{namespace}}}code").text
-                        name = item.find(f".//{{{namespace}}}name").text
-                        nsiOkfs.objects.get_or_create(
-                            code=code,
-                            name=name,
-                        )
-                    except Exception as e:
-                        pass
-                    if i > self.limit_record:
-                        br = True
-                        break
-            if br:
-                break
-
-            if class_name == 'nsiOktmo':
-                namespace = "http://zakupki.gov.ru/223fz/reference/1"
-                parent_dom = "nsiOktmoData"
-
-                items = root.findall(f".//{{{namespace}}}{parent_dom}")
-                for item in items:
-                    i += 1
-                    try:
-                        code = item.find(f".//{{{namespace}}}code").text
-                        name = item.find(f".//{{{namespace}}}name").text
-                        parent = item.find(f".//{{{namespace}}}parentCode").text if item.find(
-                            f".//{{{namespace}}}parentCode") is not None else None
-                        nsiOktmo.objects.get_or_create(
-                            code=code,
-                            name=name,
-                            parent=parent,
-                        )
-                    except Exception as e:
-                        pass
-                    if i > self.limit_record:
-                        br = True
-                        break
-            if br:
-                break
-
-            if class_name == 'nsiOkopf':
-                namespace = "http://zakupki.gov.ru/223fz/reference/1"
-                parent_dom = "nsiOkopfData"
-
-                items = root.findall(f".//{{{namespace}}}{parent_dom}")
-                for item in items:
-                    i += 1
-                    try:
-                        code = item.find(f".//{{{namespace}}}code").text
-                        name = item.find(f".//{{{namespace}}}name").text
-                        nsiOkopf.objects.get_or_create(
-                            code=code,
-                            name=name,
-                        )
-                    except Exception as e:
-                        pass
-                    if i > self.limit_record:
-                        br = True
-                        break
-            if br:
-                break
-
-            if class_name == 'nsiOkved':
-                namespace = "http://zakupki.gov.ru/223fz/reference/1"
-                parent_dom = "nsiOkvedData"
-
-                items = root.findall(f".//{{{namespace}}}{parent_dom}")
-                for item in items:
-                    i += 1
-                    try:
-                        code = item.find(f".//{{{namespace}}}code").text
-                        name = item.find(f".//{{{namespace}}}name").text
-                        section = item.find(f".//{{{namespace}}}section").text
-                        parent = item.find(f".//{{{namespace}}}parentCode").text if item.find(
-                            f".//{{{namespace}}}parentCode") is not None else None
-                        nsiOkved.objects.get_or_create(
-                            code=code,
-                            name=name,
-                            section=section,
-                            parent=parent,
-                        )
-                    except Exception as e:
-                        pass
-                    if i > self.limit_record:
-                        br = True
-                        break
-            if br:
-                break
-
             if class_name == 'nsiOkved2':
                 namespace = "http://zakupki.gov.ru/223fz/reference/1"
                 parent_dom = "nsiOkved2Data"
@@ -327,32 +176,6 @@ class ZakupkiParser:
                             name=name,
                             section=section,
                             parent=parent,
-                        )
-                    except Exception as e:
-                        pass
-                    if i > self.limit_record:
-                        br = True
-                        break
-            if br:
-                break
-
-            if class_name == 'nsiOkv':
-                namespace = "http://zakupki.gov.ru/223fz/reference/1"
-                parent_dom = "nsiOkvData"
-
-                items = root.findall(f".//{{{namespace}}}{parent_dom}")
-                for item in items:
-                    i += 1
-                    try:
-                        code = item.find(f".//{{{namespace}}}code").text
-                        digitalCode = item.find(f".//{{{namespace}}}digitalCode").text
-                        name = item.find(f".//{{{namespace}}}name").text
-                        shortName = item.find(f".//{{{namespace}}}shortName").text
-                        nsiOkv.objects.get_or_create(
-                            code=code,
-                            name=name,
-                            digitalCode=digitalCode,
-                            shortName=shortName,
                         )
                     except Exception as e:
                         pass
@@ -384,21 +207,6 @@ class ZakupkiParser:
                             name=item.find(f".//{{{namespace}}}additionalInfo").find(
                                 f".//{{{namespace}}}timeZone").find(f".//{{{namespace}}}name").text,
                         )
-                        okpo, cr = nsiOkpo.objects.get_or_create(
-                            code=item.find(f".//{{{namespace}}}classification").find(f".//{{{namespace}}}okpo").text,
-                        )
-                        okato, cr = nsiOkato.objects.get_or_create(
-                            code=item.find(f".//{{{namespace}}}classification").find(f".//{{{namespace}}}okato").text,
-                        )
-                        oktmo, cr = nsiOktmo.objects.get_or_create(
-                            code=item.find(f".//{{{namespace}}}classification").find(f".//{{{namespace}}}oktmo").text,
-                        )
-                        okfs, cr = nsiOkfs.objects.get_or_create(
-                            code=item.find(f".//{{{namespace}}}classification").find(f".//{{{namespace}}}okfs").text,
-                        )
-                        okopf, cr = nsiOkopf.objects.get_or_create(
-                            code=item.find(f".//{{{namespace}}}classification").find(f".//{{{namespace}}}okopf").text,
-                        )
 
                         org, cr = Organization.objects.get_or_create(
                             full_name=full_name,
@@ -410,31 +218,8 @@ class ZakupkiParser:
                             legalAddress=legalAddress,
                             postalAddress=postalAddress,
                             timeZone=timeZone,
-                            okpo=okpo,
-                            okato=okato,
-                            oktmo=oktmo,
-                            okfs=okfs,
-                            okopf=okopf,
                         )
 
-                    except Exception as e:
-                        pass
-
-                    try:
-                        root = item.find(f".//{{{namespace}}}classification").find(
-                            f".//{{{namespace}}}activities")
-                        okvs = root.findall(f".//{{{namespace}}}okved")
-                        for okv in okvs:
-                            o_okv, cr = nsiOkved.objects.get_or_create(
-                                code=okv.find(f".//{{{namespace}}}code").text,
-                                name=okv.find(f".//{{{namespace}}}name").text
-                            )
-                            is_main = bool(okv.find(f".//{{{namespace}}}isMain").text)
-                            OrganizationOkved.objects.get_or_create(
-                                isMain=is_main,
-                                organization=org,
-                                okved=o_okv,
-                            )
                     except Exception as e:
                         pass
 
@@ -466,25 +251,10 @@ class ZakupkiParser:
     def remove_files(self, files):
         for file in files:
             os.remove(file)
-    def parse_model(self, model):
-        model = f"{model[:3]}{model[3].upper()}{model[4:]}"
-        print(model)
-        files = self.get_xml_files(f"/out/nsi/{model}")
-        self.parse_and_save_to_db(model, files)
-        self.remove_files(files)
-
-    def parse_nsiOkato(self):
-        files = self.get_xml_files("/out/nsi/nsiOkato")
-        self.parse_and_save_to_db('nsiOkato', files)
-        self.remove_files(files)
-
-    def parse_nsiOkdp(self):
-        files = self.get_xml_files("/out/nsi/nsiOkdp")
-        self.parse_and_save_to_db('nsiOkdp', files)
-        self.remove_files(files)
 
     def parse_nsiOkdp2(self):
-        files = self.get_xml_files("/out/nsi/nsiOkpd2")
+        print("OKPD")
+        files = self.get_xml_files("/fcs_nsi/nsiOKPD2", fz=44, last=False)
         self.parse_and_save_to_db('nsiOkpd2', files)
         self.remove_files(files)
 
@@ -493,39 +263,9 @@ class ZakupkiParser:
         self.parse_and_save_to_db('nsiOkei', files)
         self.remove_files(files)
 
-    def parse_nsiOkfs(self):
-        files = self.get_xml_files("/out/nsi/nsiOkfs")
-        self.parse_and_save_to_db('nsiOkfs', files)
-        self.remove_files(files)
-
-    def parse_nsiOkogu(self):
-        files = self.get_xml_files("/out/nsi/nsiOkogu")
-        self.parse_and_save_to_db('nsiOkogu', files)
-        self.remove_files(files)
-
-    def parse_nsiOktmo(self):
-        files = self.get_xml_files("/out/nsi/nsiOktmo")
-        self.parse_and_save_to_db('nsiOktmo', files)
-        self.remove_files(files)
-
-    def parse_nsiOkopf(self):
-        files = self.get_xml_files("/out/nsi/nsiOkopf")
-        self.parse_and_save_to_db('nsiOkopf', files)
-        self.remove_files(files)
-
-    def parse_nsiOkved(self):
-        files = self.get_xml_files("/out/nsi/nsiOkved")
-        self.parse_and_save_to_db('nsiOkved', files)
-        self.remove_files(files)
-
     def parse_nsiOkved2(self):
         files = self.get_xml_files("/out/nsi/nsiOkved2")
         self.parse_and_save_to_db('nsiOkved2', files)
-        self.remove_files(files)
-
-    def parse_nsiOkv(self):
-        files = self.get_xml_files("/out/nsi/nsiOkv")
-        self.parse_and_save_to_db('nsiOkv', files)
         self.remove_files(files)
 
     def parse_Organization(self):
@@ -535,12 +275,44 @@ class ZakupkiParser:
 
 
 @shared_task
-def download(model):
+def get_from_gov_okei():
     zp = ZakupkiParser()
-    if model[:3] == 'nsi':
-        zp.parse_model(model)
-    else:
-        zp.parse_Organization()
+    zp.parse_nsiOkei()
+
+
+@shared_task
+def get_from_gov_okpd2():
+    url = "https://data.gov.ru/opendata/7710168515-okpd2/data-20160929T0100.json?encoding=UTF-8"
+    s = requests.Session()
+    r = s.get(url)
+    d = json.loads(r.text)
+    for record in d:
+        nsiOkpd2 = apps.get_model('main_app', 'nsiOkpd2')
+        nsiOkpd2.objects.get_or_create(
+            code=record.get('Kod', 0),
+            name=record.get('Name', 0),
+        )
+
+
+@shared_task
+def get_from_gov_okved2():
+    url = "https://data.gov.ru/opendata/7710168515-okved2014/data-20190514T0100.json?encoding=UTF-8"
+    s = requests.Session()
+    r = s.get(url)
+    d = json.loads(r.text)
+    for record in d:
+        nsiOkpd2 = apps.get_model('main_app', 'nsiOkpd2')
+        nsiOkpd2.objects.get_or_create(
+            code=record.get('Kod', 0),
+            name=record.get('Name', 0),
+        )
+
+
+@shared_task
+def get_from_gov_organisation():
+    zp = ZakupkiParser()
+    zp.parse_Organization()
+
 
 @shared_task
 def get_query_from_rts():
@@ -557,7 +329,7 @@ def get_query_from_rts():
     soup = BeautifulSoup(r.text, 'html.parser')
     # считываем первую страницу
     for item in soup.select('a.search-results-title'):
-
+        sleep(1)
         item_link = item.get('href')
         r = s.get(item_link)
         soup_item = BeautifulSoup(r.text, 'html.parser')
@@ -571,8 +343,8 @@ def get_query_from_rts():
             okpd2.save()
         org_link = f"{base_url}{soup_item.select('tr#trade-info-organizer-name td:last-child a')[0].get('href')}"
         r = s.get(org_link)
-        soup_org = BeautifulSoup(r.text, 'html.parser')
         print(org_link)
+        soup_org = BeautifulSoup(r.text, 'html.parser')
         short = soup_org.select('td.small')[0].parent.select('td:last-child')[0].text
         full = soup_org.select('td.small')[1].parent.select('td:last-child')[0].text
         inn = soup_org.select('td.small')[2].parent.select('td:last-child')[0].text
@@ -597,6 +369,7 @@ def get_query_from_rts():
         desc = soup_item.find_all(attrs={"itemprop": "articleBody"})[0].text
         num = soup_item.find_all(attrs={"itemprop": "headline"})[0].text
         num =  re.findall(r'\d+', num)[0]
+        doc_link = f"{base_url}{soup_item.select('table form')[0].get('action')}"
         q, c = Query.objects.get_or_create(
             okpd2=okpd2,
             organizer=org,
@@ -604,7 +377,8 @@ def get_query_from_rts():
             num=num,
             date_begin=date_begin,
             date_end=f"{date_end[6:]}-{date_end[3:5]}-{date_end[0:2]}",
-            link_to_doc=item_link,
+            url=item_link,
+            link_to_doc=doc_link,
         )
         q.save()
         nomen_link = f"{base_url}{soup_item.select('div.nav-pills ul li:last-child a ')[0].get('href')}"
@@ -631,6 +405,7 @@ def get_query_from_rts():
         r = s.get(page_url)
         soup = BeautifulSoup(r.text, 'html.parser')
         for item in soup.select('a.search-results-title'):
+            sleep(1)
             item_link = item.get('href')
             r = s.get(item_link)
             soup_item = BeautifulSoup(r.text, 'html.parser')
@@ -670,6 +445,7 @@ def get_query_from_rts():
             desc = soup_item.find_all(attrs={"itemprop": "articleBody"})[0].text
             num = soup_item.find_all(attrs={"itemprop": "headline"})[0].text
             num =  re.findall(r'\d+', num)[0]
+            doc_link = f"{base_url}{soup_item.select('table form')[0].get('action')}"
             q, c = Query.objects.get_or_create(
                 okpd2=okpd2,
                 organizer=org,
@@ -677,7 +453,8 @@ def get_query_from_rts():
                 num=num,
                 date_begin=date_begin,
                 date_end=f"{date_end[6:]}-{date_end[3:5]}-{date_end[0:2]}",
-                link_to_doc=item_link,
+                link_to_doc=doc_link,
+                url=item_link,
             )
             q.save()
             nomen_link = f"{base_url}{soup_item.select('div.nav-pills ul li:last-child a ')[0].get('href')}"
@@ -699,3 +476,57 @@ def get_query_from_rts():
                 )
                 nom_query.save()
 
+
+@shared_task
+def get_org_from_sbis():
+    orgs_model = apps.get_model('main_app', 'Organization')
+    for org in orgs_model.objects.all():
+        s = requests.Session()
+        url = f"https://sbis.ru/contragents/{org.inn}/{org.kpp}"
+        r = s.get(url)
+        soup = BeautifulSoup(r.text,'html.parser')
+        try:
+            org.director = soup.find_all(attrs={"itemprop" : "employee"})[0].text.strip()
+            print(org.director)
+        except:
+            pass
+        try:
+            org.legalAddress = soup.find_all(attrs={"itemprop" : "address"})[0].text.strip()
+            print(org.legalAddress)
+        except:
+            pass
+        try:
+            org.email = soup.find_all(attrs={"itemprop" : "email"})[0].text.strip()
+            print(org.email)
+        except:
+            pass
+        try:
+            owner_win = soup.select('.cCard__Owners-CourtStat-Complain  .cCard__Owners-CourtStat-Stat-Win > .cCard__Owners-CourtStat-Stat-Value')[0].text[:-1]
+            owner_loose = soup.select('.cCard__Owners-CourtStat-Complain  .cCard__Owners-CourtStat-Stat-Loose > .cCard__Owners-CourtStat-Stat-Value')[0].text[:-1]
+            owner_other = soup.select('.cCard__Owners-CourtStat-Complain  .cCard__Owners-CourtStat-Stat-Other > .cCard__Owners-CourtStat-Stat-Value')[0].text[:-1]
+            org.owner = f"{owner_win}/{owner_loose}/{owner_other}"
+            print(org.owner)
+        except:
+            pass
+        try:
+            defend_win = soup.select('.cCard__Owners-CourtStat-Defend-Stat  .cCard__Owners-CourtStat-Stat-Win > .cCard__Owners-CourtStat-Stat-Value')[0].text[:-1]
+            defend_loose = soup.select('.cCard__Owners-CourtStat-Defend-Stat  .cCard__Owners-CourtStat-Stat-Loose > .cCard__Owners-CourtStat-Stat-Value')[0].text[:-1]
+            defend_other = soup.select('.cCard__Owners-CourtStat-Defend-Stat  .cCard__Owners-CourtStat-Stat-Other > .cCard__Owners-CourtStat-Stat-Value')[0].text[:-1]
+            org.defend = f"{defend_win}/{defend_loose}/{defend_other}"
+            print(org.owner)
+        except:
+            pass
+        try:
+            org.info = soup.find_all(attrs={"itemprop" : "description"})[0].text.replace('\xa0',' ')
+            print(org.info)
+        except:
+            pass
+        try:
+            tender_mem = soup.select('.cCard__Reliability-Tender-data  .cCard__Reliability-Tender-Block-C2')[0].text
+            tender_win = soup.select('.cCard__Reliability-Tender-data  .cCard__Reliability-Tender-Block-C2')[1].text
+            tender_gov = soup.select('.cCard__Reliability-Gov-Contract-data  .cCard__Reliability-Tender-Block-C2')[0].text
+            org.tender = f"{tender_mem}/{tender_win}/{tender_gov}"
+            print(org.tender)
+        except:
+            pass
+        org.save()

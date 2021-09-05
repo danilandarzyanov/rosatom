@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main %}
+    <div class="col-md-9 col-lg-10 mt-0 p-0">
+        <section class="head d-flex align-items-center ">
+            <div class="row">
+                <div class="col-12">
+                    <div class="ms-5 mt-5" >
+                        <h3>Запрос предложений № {{ query.num }}</h3>
+                        <p>ОКПД 2: {{ query.okpd2 }}</p>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+
+        </section>
+        <section>
+            <table class="table p-5 table-striped">
+                <thead >
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Компания</th>
+                    <th scope="col">ОКВЭД2</th>
+                    <th scope="col">Запросы</th>
+                    <th scope="col">Оценка</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for supplier in query.find_suppliers %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td><a href="{% url 'suppliers_detail' supplier.id %}">{{ supplier.short_name }}</a></td>
+                    <td>
+                        <div class="okveds2">
+                        {% for okved2 in supplier.org_okved.all %}
+                        <p>{{ okved2.okved2 }}</p>
+                        {% endfor %}
+
+                        </div>
+                    </td>
+                    <td>
+                        {% if supplier.query_supplier.all %}
+                        <a href="" class="btn btn-success disabled">Запрос отправлен</a>
+                        {% else %}
+                            <a href="{% url 'send_email' query.id supplier.id %}" class="btn btn-success">Отправить запрос</a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <i class="fas fa-heart"></i>
+                        <i class="fas fa-heart-broken"></i>
+                    </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td colspan="4">
+                        Статус: Запрос не отправлен
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr class="last" >
+                    <th></th>
+                    <td colspan="4" class="text-center"><button class="btn btn-primary">Отправить всем</button></td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+
+
+
+
+    </div>
+    </div>
+    </div>
+    </main>
+
+{% endblock %}
+
+

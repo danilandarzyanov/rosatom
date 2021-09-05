@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main %}
+    <div class="col-md-9 col-lg-10 mt-0 p-0">
+        <section class="head d-flex align-items-center ">
+            <div class="row">
+                <div class="col-9">
+                    <div class="ms-5 mt-5" >
+                        <h3>{{ supplier.short_name }}</h3>
+                        <p class="m-1">ИНН: {{ supplier.inn }}</p>
+                        <p class="m-1">КПП: {{ supplier.kpp }}</p>
+                        <p class="m-1">ОРГН: {{ supplier.ogrn }}</p>
+                        <p class="m-1">Основной ОКВЭД2: {{ supplier.get_main_okved2 }}</p>
+                    </div>
+                </div>
+                <div class="col-3 d-flex align-items-center">
+                    <div class="dropdown d-inline">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-sync"></i> Обновить из сервиса
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item" href="#">RusProfile.ru</a></li>
+                            <li><a class="dropdown-item" href="#">CБИС Контрагенты</a></li>
+                            <li><a class="dropdown-item" href="#">Контур.Фокус</a></li>
+                            <li><a class="dropdown-item" href="#">СберКорус</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="table-num p-3">
+            <div class="row">
+                <div class="col-6">
+                    <h5>Краткая информация</h5>
+                    <p>{{ supplier.info }}</p>
+                    <h5>ОКВЭД2:</h5>
+                    {% for okved in supplier.org_okved.all %}
+                    <p>{{ okved.okved2 }}</p>
+                    {%  endfor %}
+                </div>
+                <div class="col-6">
+                    <h5 class="m-2">Рейтинг надежности</h5>
+                    <span class="btn btn-success m-2">Отличный</span>
+                    <h5 class="m-2">Руководитель
+                    </h5>
+                    <div class="concrt m-2">
+                        <span class="section__info">
+                        {{ supplier.director }}
+                    </span>
+                    </div>
+                    <h5 class="m-2">Электронная почта:
+                    </h5>
+                    <div class="concrt m-2">
+                        <span class="section__info">
+                        {{ supplier.email }}
+                    </span>
+                    </div>
+                    <h5 class="m-2">Юридический адрес:
+                    </h5>
+                    <div class="concrt">
+                        <span class="section__info m-2">
+                        {{ supplier.legalAddress }}
+                    </span>
+                    </div>
+                    <h5 class="m-2">Торги (учавствовал/выиграл/госконтракт):
+                    </h5>
+                    <div class="concrt">
+                        <span class="section__info m-2">
+                        {{ supplier.tender }}
+                    </span>
+                    </div>
+                    <h5 class="m-2">Суды (выиграл/проиграл/прочее):
+                    </h5>
+                    <h6 class="m-2">Истец:
+                    </h6>
+                    <div class="concrt">
+                        <span class="section__info m-2">
+                        {{ supplier.owner }}
+                    </span>
+                    </div>
+                    <h6 class="m-2">Ответчик:
+                    </h6>
+                    <div class="concrt">
+                        <span class="section__info m-2">
+                        {{ supplier.defend }}
+                    </span>
+                    </div>
+                </div>
+                </div>
+        </section>
+
+        <section class="chart">
+            <div class="col-10">
+                <canvas id="myChart"></canvas>
+            </div>
+        </section>
+
+    </div>
+    </div>
+    </div>
+    </main>
+
+{% endblock %}
+
+

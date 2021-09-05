@@ -19,61 +19,57 @@
             <p>АРХИМЕТСТРОЙ-РУС</p>
             Проведение данной процедуры сбора информации не влечет за собой возникновения каких-либо обязательств для
             заказчика.
+            <form method="POST" action="{% url 'print' %}">
+                {% csrf_token %}
+                <table class="table" id="form-table-add">
 
-            <table class="table" id="form-table-add">
-                <thead>
-                <tr id="num1">
-                    <td>Номенклатура</td>
-                    <td>Единица измерения</td>
-                    <td>Количество</td>
-                    <td>Цена</td>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td> БУМАГА ТУАЛЕТНАЯ PREMIUM T4 120320 ДВУХСЛОЙНАЯ 8РУЛ РКРЗ</td>
-                    <td>упк</td>
-                    <td>12000</td>
-                    <td><input type="text" value="" placeholder="Цена за шт"></td>
-                </tr>
-                <tr>
-                    <td> БУМАГА ТУАЛЕТНАЯ PREMIUM T2 120243 ДВУХСЛОЙНАЯ</td>
-                    <td>упк</td>
-                    <td>500</td>
-                    <td><input type="text" value="" placeholder="Цена за шт"></td>
-                </tr>
+                    <thead>
+                    <tr id="num1">
+                        <td>Номенклатура</td>
+                        <td>Единица измерения</td>
+                        <td>Количество</td>
+                        <td>Цена</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for qn in qs.query.query_nomenclature.all %}
+                        <tr>
+                            <td>{{ qn.nomenclature }}</td>
+                            <td>{{ qn.ie }}</td>
+                            <td>{{ qn.count }}</td>
+                            <td><input type="text" value="" name="price{{ forloop.counter0 }}" placeholder="Цена за шт">
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <h3>Немного дополнительной информации</h3>
+                <div class="row">
 
-                <tr>
-                    <td>ПОЛОТЕНЦЕ БУМАЖНОЕ 120108 TORK 250Х20ШТ/ПАЧ</td>
-                    <td>упк</td>
-                    <td>1200</td>
-                    <td><input type="text" value="" placeholder="Цена за шт"></td>
-                </tr>
-                </tbody>
-            </table>
-            <h3>Немного дополнительной информации</h3>
-            <div class="row">
-                <div class="col-6">
-                    <label for="">Срок действия цены</label>
-                    <input type="date" class="form-control">
-                </div>
-                <div class="col-6">
-                    <label for=""> Цены указаны?</label><br>
-                    С НДС <input type="checkbox" name="" id="">
-                    <br>
-                    БЕЗ НДС <input type="checkbox" name="" id="">
+                    <div class="col-6">
+                        <label for="">Срок действия цены</label>
+                        <input type="date" class="form-control" name="date_end">
+                    </div>
+                    <div class="col-6">
+                        <label for="">Цены указаны?</label><br>
+                        С НДС <input type="radio" name="nds" id="nds" value="nds">
+                        <br>
+                        БЕЗ НДС <input type="radio" name="nds" id="no_nds" value="no_nds">
+                    </div>
+
                 </div>
 
-            </div>
 
+                <textarea name="ext" id="" class="form-control p-2"
+                          placeholder="Имеются ли дополнительные затраты" ></textarea>
+                <input type="hidden" value="{{ qs.id }}" name="qs" >
+                <div class="col-12 d-flex mt-3 justify-content-between">
 
-            <textarea name="" id="" class="form-control p-2" placeholder="Имеются ли дополнительные затраты"></textarea>
+                    <a href="{% url 'step3' qs.id %}" class="btn btn-success">Дальше</a>
+                    <button type="submit" class="btn btn-success">Распечатать</button>
 
-            <div class="col-12 d-flex mt-3 justify-content-between">
-
-                <a href="{% url 'step3' %}" class="btn btn-success">Дальше</a> <a href="static/img/tkp.pdf" class="btn btn-success">Распечатать</a>
-
-            </div>
+                </div>
+            </form>
 
         </section>
 
