@@ -1,0 +1,21 @@
+version: '3.1'
+
+services:
+  postgresql:
+    image: postgres
+    container_name: pg-docker
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=django
+      - POSTGRES_PASSWORD=password
+    restart: always
+  rabbitmq:
+    image: docker.io/bitnami/rabbitmq:3.9
+    ports:
+      - '4369:4369'
+      - '5672:5672'
+      - '25672:25672'
+      - '15672:15672'
+    environment:
+      - RABBITMQ_SECURE_PASSWORD=yes
