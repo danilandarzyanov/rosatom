@@ -39,7 +39,16 @@
 
 УСТАНОВКА
 ------------
+### Клонирование репозитория
+
+Выполните 
+~~~
+git clone https://github.com/danilandarzyanov/rosatom.git
+cd rosatom
+~~~
 ### Установка docker контейнеров rabbitmq и postgressql
+
+Для работы необходим Docker. С инструкцией по установке можно ознакомиться <a target='_blank' href='https://docs.docker.com/compose/install/'>здесь</a>
 
 Выполните 
 ~~~
