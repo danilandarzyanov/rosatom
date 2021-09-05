@@ -66,7 +66,10 @@ pip install -r requirements.txt
 
 Для заполнения базы данных системной информацией выполните в корневой папке сервиса: 
 ~~~
-cd zakupki
+docker exec -it pg-docker bash
+psql -c 'create database rosatom' -U django
+exit
+cd ../zakupki
 python manage.py makemigrations
 python manage.py migrate
 ~~~
