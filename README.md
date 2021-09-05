@@ -1,96 +1,85 @@
 <p align="center">
-    <h1 align="center">ВАЖНО!!!</h1>
+	<img src='https://github.com/danilandarzyanov/rosatom/blob/main/logo.jpg?raw=true' />
+    <h1 align="center">Ассистент закупщика</h1>
     </p>
-<p>Не указывать название команды, не указывать наименование хакатона и название проекта.</p>
-<p>Ниже приведено то что должно быть в вашем README </p>
+<p><b>Ассистент Закупщика (АЗ)</b> - это сервис по автоматическому поиску потенциальных поставщиков для корпорации Росатом и площадка для коммуникации. АЗ найдет поставщика, направит ему запрос на ТКП, поможет его сформировать и отправит в Росатом, также АЗ пригласит участника к участию в торгах. Кроме того, АЗ проанализирует контрагентов, а также поможет понять, почему контрагенты не желают принимать участие в закупках.
+
+Решение уникально, потому что сейчас нет ни одного сервиса, который предлагает простой пошаговый способ фомирования документов для участия в закупках, а значит упрощает вход на площадки для потенциальных участников закупки. </p>
 
 <h4>Реализованная функциональность</h4>
 <ul>
-    <li>Функционал 1;</li>
-    <li>Функционал 2;</li>
-    <li>Функционал 3;</li>
+    <li>Поможет в поиске потенциальных поставщиков;</li>
+    <li>Запросит ТКП;</li>
+    <li>Пригласитучастников к торгам;</li>
+    <li>Поможетоформитьдокументы;</li>
+    <li>Проведёт анализ отказов;</li>
 </ul> 
 <h4>Особенность проекта в следующем:</h4>
 <ul>
- <li>Киллерфича-1;</li>
- <li>Киллерфича-2;</li>
- <li>Киллерфича-3;</li>  
+ <li>Поиск потенциальныхпоставщиков из всевозможныхисточников;</li>
+ <li>Интеграция с Контур Фокус,СБИС Контрагенты, RUSRPOFILE;</li>
+ <li>Гибкие возможности ранжирования поставщиков;</li>  
+ <li>Упрощенное формирование пакетов документов;</li>  
+ <li>Дружественный UI;</li>	
+ <li>Единая площадка для коммуникации</li>
+ <li>Интеграция с порталами закупок</li>
  </ul>
 <h4>Основной стек технологий:</h4>
 <ul>
-    <li>LAMP/LEMP/FAMP/FEMP.</li>
-	<li>HTML, CSS, JavaScript, TypeScript.</li>
-	<li>PHP 7, MySQL.</li>
-	<li>Symfony, Laravel, Zend Framework, Yii, Kohana.</li>
-	<li>LESS, SASS, PostCSS.</li>
-	<li>Gulp, Webpack, Babel.</li>
-	<li>БЭМ.</li>
-	<li>React (Next.js), Vue (Nuxt.js), Angular.</li>
-	<li>Git, Mercurial.</li>
-	<li>Jenkins, Gitlab.</li>
-  
+    <li>python</li>
+	<li>django</li>
+	<li>docker</li>
+	<li>rabbitmq</li>
+	<li>celery</li>
+	<li>PostgreSQL</li>
  </ul>
 <h4>Демо</h4>
-<p>Демо сервиса доступно по адресу: http://demo.test </p>
-<p>Реквизиты тестового пользователя: email: <b>testuser@test.ru</b>, пароль: <b>testuser</b></p>
-
-
-
-
-СРЕДА ЗАПУСКА
-------------
-1) развертывание сервиса производится на debian-like linux (debian 9+);
-2) требуется установленный web-сервер с поддержкой PHP(версия 7.4+) интерпретации (apache, nginx);
-3) требуется установленная СУБД MariaDB (версия 10+);
-4) требуется установленный пакет name1 для работы с...;
+<p>Демо сервиса доступно по адресу: https://clck.ru/XHiYP </p>
 
 
 УСТАНОВКА
 ------------
-### Установка пакета name
+### Установка docker контейнеров rabbitmq и postgressql
 
 Выполните 
 ~~~
-sudo apt-get update
-sudo apt-get upgrade
-sudo apt-get install name1
-sudo apt-get install mariadb-client mariadb-server
-git clone https://github.com/Sinclear/default_readme
-cd default_readme
-...
+cd docker
+docker-compose up -d
 ~~~
-### База данных
+### Установка зависимостей
 
-Необходимо создать пустую базу данных, а подключение к базе прописать в конфигурационный файл сервиса по адресу: папка_сервиса/...
+Выполните
 ~~~
-sudo systemctl restart mariadb
-sudo mysql_secure_installation
-mysql -u root -p
-mypassword
-CREATE DATABASE mynewdb;
-quit
+pip install -r requirements.txt 
 ~~~
-### Выполнение миграций
+
+### Запуск миграций
 
 Для заполнения базы данных системной информацией выполните в корневой папке сервиса: 
 ~~~
-mysql -u root -p -f mynewdb < папка_сервиса/...
-mypassword
-~~~
-и согласитесь с запросом
-
-### Установка зависимостей проекта
-
-Установка зависимостей осуществляется с помощью [Composer](http://getcomposer.org/). Если у вас его нет вы можете установить его по инструкции
-на [getcomposer.org](http://getcomposer.org/doc/00-intro.md#installation-nix).
-
-После этого выполнить команду в директории проекта:
-
-~~~
-composer install
+cd zakupki
+python manage.py makemigrations
+python manage.py migrate
 ~~~
 
-РАЗРАБОТЧИКИ
+### Запуск web-сервиса
 
-<h4>Иванов Иван fullstack https://t.me/test@name1 </h4>
+Выполните
+~~~
+cd zakupki
+python manage.py runserver <ip-адрес>:<порт>
+~~~
+Для использования его на любом интерфейсе адрес укажите 0.0.0.0
+
+### Внимание 
+
+Сервис находится в режиме debug, чтобы запустить без режима debug, замените в файле zakupki/zakupki/setting.py строку DEBUG=True на DEBUG=False и выполните:
+~~~
+python manage.py collectstatic
+python manage.py runserver <ip-адрес>:<порт>
+~~~
+
+РАЗРАБОТЧИК
+
+<h4>Андарзянов Данил fullstack https://t.me/Daniel_a123 </h4>
 
